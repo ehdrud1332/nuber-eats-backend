@@ -1,6 +1,7 @@
 // dto는  data transfer object
 
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
+import { IsBoolean, IsString, Length } from 'class-validator';
 // inputType은 내가 input 하고자 하는 data의 type이다.
 
 // ArgsType은 기본적으로 이것들을 분리된 args로써 정의할 수 있게 해준다.
@@ -8,11 +9,19 @@ import { ArgsType, Field, InputType } from '@nestjs/graphql';
 @ArgsType()
 export class CreateRestaurantDto {
   @Field(type => String)
+  @IsString()
+  @Length(5, 10)
   name: string;
+
   @Field(type => Boolean)
+  @IsBoolean()
   isVegan: boolean;
+
   @Field(type => String)
+  @IsString()
   address: string;
+
   @Field(type => String)
+  @IsString()
   ownerName: string;
 }
