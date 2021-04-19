@@ -2,6 +2,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
+// Repository는 Entity랑 상호작용하는걸 담당한다.
+// NestJS에서 Data Mapper 방법을 쓰는 이유는 NestJs + TypeORM 개발 환경에서 Reposioty를 사용하는 모듈을 쓸 수 있기 때문이다.
+// 그리고 Repository를 사용하면 어디서든지 접근할 수가 있다.
+// 실제로 구현하는 서비스에서 접근이 가능하고 테스팅할 때도 접근이 가능하다.
+
 // objectType은 자동으로 스키마를 빌드하기 위해 사용하는 GraphQL decorator
 // Entity는 TypeORM이 DB에 이걸 저장하게 해준다.
 // 이렇게 하면 클래스 하나로 graphQL 스키마와 DB에 저장되는 실제 데이터의 형식을 만들 수 있다.
