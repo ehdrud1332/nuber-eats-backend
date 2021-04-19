@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { ConfigModule } from '@nestjs/config';
 
 // AppModule은 main.ts로 import되는 유일한 모듈이다.
 // main.ts는 우리의 application을 실행하기 위한 것!
@@ -11,7 +12,11 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
   imports: [
-    RestaurantsModule,
+    ConfigModule.forRoot({
+      // IsGlobal은 나의 어플리케이션의 어디서나 config 모듈에 접근할 수 있다는 것
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -28,6 +33,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
       // 기본적으로 이것이 schema파일을 만들어낸다. schema.gql파일을 따로 가지고 있지 않아도 된다는 의미.
       autoSchemaFile: true,
     }),
+    RestaurantsModule,
   ],
   controllers: [],
   providers: [],
