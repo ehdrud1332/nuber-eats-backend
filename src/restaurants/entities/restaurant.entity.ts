@@ -6,6 +6,13 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class Restaurant {
   @Field(type => String) // 이 부분은 graphQl을 위한 return
   name: string; // 이건 ts를 위한 return
+
   @Field(type => Boolean, { nullable: true })
-  isGood?: boolean;
+  isVegan?: boolean;
+
+  @Field(type => String)
+  address: string;
+
+  @Field(type => String)
+  ownerName: string;
 }
