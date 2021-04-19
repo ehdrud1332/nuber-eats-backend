@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import * as Joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RestaurantsModule } from './restaurants/restaurants.module';
@@ -20,6 +21,14 @@ import { ConfigModule } from '@nestjs/config';
       // production 환경일 때는 ConfigModule이 환경변수 파일을 무시한다.
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
       // validationSchema라는 건 내가 원하는 모든 환경 변수의 유효성을 검사할 수 있다.
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string().valid('dev', 'prod').required(),
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.string().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
+      }),
     }),
     TypeOrmModule.forRoot({
       // TypeORM의 설정옵션은 port가 number여야한다.
