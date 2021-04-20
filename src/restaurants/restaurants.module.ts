@@ -9,6 +9,7 @@ import { RestaurantsService } from './restaurants.service';
   imports: [
     // TypeORM을 이용해서 Restaurant repository를 import 했다.
     // repository를 inject하고나면 restaurants.module에서 모든게 돌아간다.
+    // forFeature는 TypeOrmModule이 특정 feature를 import할 수 있게 도와줌.
     TypeOrmModule.forFeature([
       // 이곳은 entity를 넣는 곳.
       Restaurant,
