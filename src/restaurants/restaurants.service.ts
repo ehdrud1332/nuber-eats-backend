@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Restaurant } from './entities/restaurant.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 
 @Injectable()
 export class RestaurantsService {
@@ -15,5 +16,12 @@ export class RestaurantsService {
   getAll(): Promise<Restaurant[]> {
     // this.restaurants. 을 했을때 Repository에 접근해 모든 걸 할 수 있다.
     return this.restaurants.find();
+  }
+  // method는 class안에 있는 function이다.
+  createRestaurant(
+    createRestaurantDto: CreateRestaurantDto,
+  ): Promise<Restaurant> {
+    const newRestaurant = this.restaurants.create(createRestaurantDto);
+    return this.restaurants.save(newRestaurant);
   }
 }
