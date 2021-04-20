@@ -5,6 +5,7 @@ import { Restaurant } from './entities/restaurant.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dtos/update-restaurant-dto';
 
 @Injectable()
 export class RestaurantsService {
@@ -23,5 +24,10 @@ export class RestaurantsService {
   ): Promise<Restaurant> {
     const newRestaurant = this.restaurants.create(createRestaurantDto);
     return this.restaurants.save(newRestaurant);
+  }
+
+  // update는 db에 entity가 있는지 없는지 확인하지 않고 update query를 실행한다.
+  updateRestaurant({ id, data }: UpdateRestaurantDto) {
+    return this.restaurants.update(id, { ...data });
   }
 }
