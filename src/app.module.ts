@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RestaurantsModule } from './restaurants/restaurants.module';
 import { ConfigModule } from '@nestjs/config';
-import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entity/users.entities';
 
 // AppModule은 main.ts로 import되는 유일한 모듈이다.
 // main.ts는 우리의 application을 실행하기 위한 것!
@@ -43,13 +44,14 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
       synchronize: process.env.NODE_ENV !== 'prod',
       // logging은 데이터베이스에서 무슨 일이 일어나는지 콘솔에 표시하는것
       logging: process.env.NODE_ENV !== 'prod',
-      entities: [Restaurant], // TypeOrModule에서 entity에 Restaurant를 넣어 줬기 때문에 DB가 되는 것!
+      entities: [User], // TypeOrModule에서 entity에 Restaurant를 넣어 줬기 때문에 DB가 되는 것!
     }),
     GraphQLModule.forRoot({
       // 기본적으로 이것이 schema파일을 만들어낸다. schema.gql파일을 따로 가지고 있지 않아도 된다는 의미.
       autoSchemaFile: true,
     }),
-    RestaurantsModule,
+    UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
