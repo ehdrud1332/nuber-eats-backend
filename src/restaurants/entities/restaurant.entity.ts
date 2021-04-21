@@ -9,13 +9,12 @@ import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
 // 실제로 구현하는 서비스에서 접근이 가능하고 테스팅할 때도 접근이 가능하다.
 
 // objectType은 자동으로 스키마를 빌드하기 위해 사용하는 GraphQL decorator
-// Entity는 TypeORM이 DB에 이걸 저장하게 해준다.
 // 이렇게 하면 클래스 하나로 graphQL 스키마와 DB에 저장되는 실제 데이터의 형식을 만들 수 있다.
 // @InputType({ isAbstract: true })
 // ⇧ 이게 무슨 말이냐면 inputType이 스키마에 포함되지 않길 원한다는 것
 @InputType({ isAbstract: true })
 @ObjectType()
-@Entity()
+@Entity() // Entity는 TypeORM이 DB에 이걸 저장하게 해준다.
 export class Restaurant {
   @PrimaryGeneratedColumn()
   @Field(type => Number)
