@@ -17,20 +17,21 @@ export class UsersService {
     email,
     password,
     role,
-  }: CreateAccountInput): Promise<string | undefined> {
+  }: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
     try {
       const exists = await this.users.findOne({ email });
       // 회원가입 순서
       // 1. 사용자 데이터베아스에 존재하지 않는 email인지 확인 해야 할 필요가 있다.
       if (exists) {
         // make error 이메일이 존재한다는 뜻이니까
-        return 'There is a user with that email already';
+        return { ok: false, error: 'There is a user with that email already' };
       } else {
         await this.users.save(this.users.create({ email, password, role }));
+        return { ok: true };
       }
     } catch (e) {
       // make error
-      return "Couldn't create account";
+      return { ok: false, error: "Couldn't create account" };
     }
 
     // create User & hash the password

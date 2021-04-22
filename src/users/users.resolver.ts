@@ -17,18 +17,16 @@ export class UsersResolver {
 
   @Mutation(returns => CreateAccountOutput)
   async createAccount(
+    // resolver가 하는 일은 오직 input을 가지고  output을 보내는 역할을 한다.
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
     try {
-      const error = await this.userService.createAccount(createAccountInput);
-      if (error) {
-        return {
-          ok: false,
-          error,
-        };
-      }
+      const { ok, error } = await this.userService.createAccount(
+        createAccountInput,
+      );
       return {
-        ok: true,
+        ok,
+        error,
       };
     } catch (e) {
       return {
