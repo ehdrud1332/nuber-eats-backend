@@ -13,21 +13,24 @@ export class UsersService {
   ) {}
 
   // createAccountInput을 type으로 받는다
-  async createAccount({ email, password, role }: CreateAccountInput) {
+  async createAccount({
+    email,
+    password,
+    role,
+  }: CreateAccountInput): Promise<string | undefined> {
     try {
       const exists = await this.users.findOne({ email });
       // 회원가입 순서
       // 1. 사용자 데이터베아스에 존재하지 않는 email인지 확인 해야 할 필요가 있다.
       if (exists) {
         // make error 이메일이 존재한다는 뜻이니까
-        return;
+        return 'There is a user with that email already';
       } else {
         await this.users.save(this.users.create({ email, password, role }));
-        return true;
       }
     } catch (e) {
       // make error
-      return;
+      return "Couldn't create account";
     }
 
     // create User & hash the password
