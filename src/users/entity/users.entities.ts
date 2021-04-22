@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity } from 'typeorm';
 import { CoreEntity } from '../../common/entity/core.entities';
 import {
   Field,
@@ -6,7 +6,8 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { type } from 'os';
+import * as bcrypt from 'bcrypt';
+import { InternalServerErrorException } from '@nestjs/common';
 
 // enum은 열거한다(enumable)는 뜻이다.
 enum UserRole {
@@ -36,4 +37,16 @@ export class User extends CoreEntity {
   @Column({ type: 'enum', enum: UserRole }) // DB에는 type이 enum인 UserRole이 있다.
   @Field(type => UserRole) // type이 UserRole인 graphQl을 가지고 있고
   role: UserRole;
+
+  @BeforeInsert()
+  async hashPassword(): Promise<void> {
+    // bcrypt는 hash 하는데 최고의 module이다.
+    // DB에 저장하기 전에 여기 instance의 password를 받아서 hash한다.
+    try {
+      this.password = await bcrypt.hash(this.password, 10);
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
 }

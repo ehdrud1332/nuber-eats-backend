@@ -35,5 +35,7 @@ export class UsersService {
     }
 
     // create User & hash the password
+    // hash는 단방향 함수이다.
+    // @BeforeInsert Entity안에 어떤 이름이든지 메서드를 정의하고, BeforeInsert라고 mark할 수 있습니다.
   }
 }
