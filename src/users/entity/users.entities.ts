@@ -8,6 +8,7 @@ import {
 } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
+import { IsEmail, IsEnum } from 'class-validator';
 
 // enum은 열거한다(enumable)는 뜻이다.
 enum UserRole {
@@ -27,6 +28,7 @@ registerEnumType(UserRole, { name: 'UserRole' });
 export class User extends CoreEntity {
   @Column() // DB를 위한 코드
   @Field(type => String) // GraphQL을 위한 코드
+  @IsEmail()
   email: string;
 
   @Column()
@@ -36,6 +38,7 @@ export class User extends CoreEntity {
   // type은 enum이고 enum을 전달해줘야 하는데 이 경우에는 enum: UserRole이 된다.
   @Column({ type: 'enum', enum: UserRole }) // DB에는 type이 enum인 UserRole이 있다.
   @Field(type => UserRole) // type이 UserRole인 graphQl을 가지고 있고
+  @IsEnum(UserRole)
   role: UserRole;
 
   @BeforeInsert()
