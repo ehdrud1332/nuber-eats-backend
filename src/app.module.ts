@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entity/users.entities';
+import { KeyObject } from 'crypto';
 
 // AppModule은 main.ts로 import되는 유일한 모듈이다.
 // main.ts는 우리의 application을 실행하기 위한 것!
@@ -30,6 +31,7 @@ import { User } from './users/entity/users.entities';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        SECRET_KEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
