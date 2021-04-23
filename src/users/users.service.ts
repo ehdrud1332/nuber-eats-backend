@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { LoginInput } from './dtos/login.dto';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '../jwt/jwt.service';
 
 @Injectable()
 export class UsersService {
@@ -14,9 +15,8 @@ export class UsersService {
     // type이 Repository이고 repository type은 user entity가 된다.
     @InjectRepository(User) private readonly users: Repository<User>,
     private readonly config: ConfigService,
-  ) {
-    console.log(this.config.get('SECRET_KEY'));
-  }
+    private readonly jwtService: JwtService,
+  ) {}
 
   // createAccountInput을 type으로 받는다
   async createAccount({
@@ -66,7 +66,7 @@ export class UsersService {
       const token = jwt.sign({ id: user.id }, this.config.get('SECRET_KEY'));
       return {
         ok: true,
-        token: 'lalalalal',
+        token,
       };
     } catch (error) {
       return {
