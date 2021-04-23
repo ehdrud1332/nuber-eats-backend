@@ -8,6 +8,6 @@ export class LoginInput extends PickType(User, ['email', 'password']) {}
 @ObjectType()
 export class LoginOutput extends MutationOutput {
   // ok, error와 별개로 Login이 token을 return 할 예정
-  @Field(type => String)
-  token: string;
+  @Field(type => String, { nullable: true })
+  token?: string;
 }

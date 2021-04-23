@@ -41,12 +41,25 @@ export class User extends CoreEntity {
   @IsEnum(UserRole)
   role: UserRole;
 
+  // create User & hash the password
+  // hash는 단방향 함수이다.
+  // @BeforeInsert Entity안에 어떤 이름이든지 메서드를 정의하고, BeforeInsert라고 mark할 수 있습니다.
   @BeforeInsert()
   async hashPassword(): Promise<void> {
     // bcrypt는 hash 하는데 최고의 module이다.
     // DB에 저장하기 전에 여기 instance의 password를 받아서 hash한다.
     try {
       this.password = await bcrypt.hash(this.password, 10);
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async checkPassword(aPassword: string): Promise<boolean> {
+    try {
+      const ok = await bcrypt.compare(aPassword, this.password);
+      return ok;
     } catch (e) {
       console.log(e);
       throw new InternalServerErrorException();

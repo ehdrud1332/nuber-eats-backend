@@ -3,6 +3,7 @@ import { User } from './entity/users.entities';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { CreateAccountInput } from './dtos/create-account.dto';
+import { LoginInput } from './dtos/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -33,9 +34,39 @@ export class UsersService {
       // make error
       return { ok: false, error: "Couldn't create account" };
     }
+  }
 
-    // create User & hash the password
-    // hash는 단방향 함수이다.
-    // @BeforeInsert Entity안에 어떤 이름이든지 메서드를 정의하고, BeforeInsert라고 mark할 수 있습니다.
+  async login({
+    email,
+    password,
+  }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
+    try {
+      // step 1. find the user with the email
+      const user = await this.users.findOne({ email });
+      if (!user) {
+        return {
+          ok: false,
+          error: 'User not found',
+        };
+      }
+      // step 2. check if the password is correct
+      const passwordCorrect = await user.checkPassword(password);
+      if (!passwordCorrect) {
+        return {
+          ok: false,
+          error: 'Wrong Password',
+        };
+      }
+      // step 3. make a jwt and give it to the user
+      return {
+        ok: true,
+        token: 'lalalalal',
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error,
+      };
+    }
   }
 }
