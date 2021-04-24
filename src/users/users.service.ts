@@ -14,7 +14,6 @@ export class UsersService {
     // User entity의 InjectRepository를 불어온다.
     // type이 Repository이고 repository type은 user entity가 된다.
     @InjectRepository(User) private readonly users: Repository<User>,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -63,7 +62,7 @@ export class UsersService {
         };
       }
       // step 3. make a jwt and give it to the user
-      const token = jwt.sign({ id: user.id }, this.config.get('PRIVATE_KEY'));
+      const token = this.jwtService.sign(user.id);
       return {
         ok: true,
         token,
